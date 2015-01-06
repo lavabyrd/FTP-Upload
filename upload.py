@@ -1,9 +1,13 @@
 import os
 from ftplib import FTP
 import json
- 
+
+
+with open("example.json") as input_config:
+    config = json.load(input_config)  
+    
 os.chdir('c:\\temp')
-login = json.load('ftpcred.json') 
+
 
 ## allows reset of file names, only used for testing
  
