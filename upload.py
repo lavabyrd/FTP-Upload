@@ -1,16 +1,16 @@
 import os
 from ftplib import FTP
+import json
  
 os.chdir('c:\\temp')
- 
+login = json.load('ftpcred.json') 
+
 ## allows reset of file names, only used for testing
  
 def reset():
     dub = '12345678.sps'
     snn = '34567890.sps'
     ork = '98765432.sps'
-    toplion41940 = '41940123.sps'
-    sportsfac80790 = '80790345.sps'
     ibm = 'temp111.dat'
     for file in os.listdir('c:\\temp'):
         if file.endswith('12345678.sps'):
@@ -19,10 +19,6 @@ def reset():
             os.rename(file, snn)
         elif file.endswith('98765432.sps'):
             os.rename(file, ork)
-        elif file.endswith('41940123.sps'):
-            os.rename(file, toplion41940)
-        elif file.endswith('80790345.sps'):
-            os.rename(file, sportsfac80790)
         elif file.endswith('ibmfile.sps'):
             os.rename(file, ibm)
  
@@ -33,14 +29,8 @@ def main():
         dub = 'DUB0000000109SPS' + file
         ork = 'DUB0000000502SPS' + file
         snn = 'DUB0000000510SPS' + file
-        toplion41940 = 'DUB0000000435SPS' + file
-        sportsfac80790 = 'DUB0000000435SPS' + file
         ibm = 'ibmfile.sps'
-        if file.startswith('41940'):
-            os.rename(file, toplion41940)
-        elif file.startswith('80790'):
-            os.rename(file, sportsfac80790)
-        elif file.endswith('.dat'):
+        if file.endswith('.dat'):
             os.rename(file, ibm)
         elif file.endswith('.sps'):
             station = raw_input('What station do you want to upload to? (choose dub, ork or snn)')
@@ -54,11 +44,11 @@ def main():
 ## ftp upload script
  
 def dcs_upload():
-    ftp = FTP('1')
-    username = '111'
-    password = '111'
+    ftp = FTP(login['ftp'])
+    username = login['user']
+    password = login['password']
     ftp.login(username, password)
-    ftp.cwd('/in/work_test')
+    ftp.cwd(login['workdir'])
     for file in os.listdir('c:\\temp'):
         stored = 'proc/' + file
         myfile = open(file, 'r')
